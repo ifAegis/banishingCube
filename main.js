@@ -4,7 +4,7 @@
 // @version      2024-08-18
 // @description  Banish unruly YouTube re-recs into the void
 // @author       Aegis
-// @match        https://www.youtube.com/
+// @match        https://www.youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
