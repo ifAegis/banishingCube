@@ -95,6 +95,8 @@ Scroll to the bottom of the "Filter Lists" page
 
 Click on "Import", and enter the URL of your workerLister Worker
 
+I also personally recommend adding `www.youtube.com##ytd-rich-grid-row,#contents.ytd-rich-grid-row:style(display: contents !important)` to "My filters" as this will remove any gaps left in the grid, but this is not at all required
+
 Ublock Origin will automatically update your list every 6 hours
 
 ### Thank you for using my code and I hope it serves you well
