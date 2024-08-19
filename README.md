@@ -24,8 +24,6 @@ Clear any existing lines from the file, and copy and paste the contents of main.
 
 Save under File, or with Ctrl+S
 
-Go to Settings, and under "User matches" add `www.youtube.com/*`
-
 ### You will need to come back to this later after setting up Workers, do not close the dashboard
 
 Skip to the Cloudflare section for now
