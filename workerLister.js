@@ -11,7 +11,7 @@ export default {
       }
 
       if (!url.includes('/watch')) {
-        return new Response('URL is not a video', { status: 400});
+        return new Response('URL is not a video', { status: 400 });
       }
 
       try {
