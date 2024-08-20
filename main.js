@@ -105,6 +105,23 @@ const cubeCss = `
     .cube.success .big span {
         animation: flashBlue 1s ease-out;
     }
+    @keyframes flashOrange {
+        0% {
+            border-color: #00ff00; /* Default green */
+            filter: drop-shadow(0 0 20px #00ff00);
+        }
+        50% {
+            border-color: #ffa500; /* Flashing orange */
+            filter: drop-shadow(0 0 20px #ffa500);
+        }
+        100% {
+            border-color: #00ff00; /* Back to green */
+            filter: drop-shadow(0 0 20px #00ff00);
+        }
+    } /* Allow visual checking of "URL already exists" */
+    .cube.bounced .big span {
+        animation: flashOrange 1s ease-out;
+    }
 `;
 
 // Create a <style> element and append the CSS
@@ -160,9 +177,14 @@ function sendUrlToCloudflare() {
                     const data = JSON.parse(response.responseText);
                     console.log('URL appended:', data);
                     if (cube) {
-                        cube.classList.add('success');
+                        if (data.bounce) {
+                            cube.classList.add('bounced'); // Turn the cube orange if URL already exists
+                        } else {
+                            cube.classList.add('success'); // Turn the cube blue on success
+                        }
                         setTimeout(() => {
                             cube.classList.remove('success');
+                            cube.classList.remove('bounced');
                         }, 1000); // Remove the class after 1 second
                     }
                 } catch (error) {
