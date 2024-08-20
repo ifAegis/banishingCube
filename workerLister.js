@@ -1,32 +1,63 @@
 export default {
   async fetch(request, env) {
-    // Handle GET requests
-    if (request.method === 'GET') {
-      const objectKey = 'urls.txt'; // File name in R2 bucket, if you changed the save file from "urls.txt", change it here too
+    const objectKey = 'urls.txt'; // Use a single file to append URLs
+    const initialTitle = '! Title: Banishing Cube';
+
+    if (request.method === 'POST') {
+      let { url } = await request.json();
+
+      if (!url) {
+        return new Response('No URL provided', { status: 400 });
+      }
 
       try {
-        // Fetch the content of the file from R2 bucket
-        const object = await env.R2_BUCKET.get(objectKey); // Bind the same R2 bucket as the other worker. Don't forget to fix the variable name if you changed it!
-        
-        if (!object) {
-          return new Response('File not found', { status: 404 }); // You'll get this error if you've not added any URLs to the bucket yet.
+        // Remove the "&t=*" parameter if it exists
+        url = url.replace(/&t=\d+s?/, '');
+
+        // Fetch existing content from R2 bucket
+        let existingContent = await env.R2_BUCKET.get(objectKey);
+        if (existingContent === null) {
+          // Initialize if file does not exist
+          existingContent = initialTitle;
+        } else {
+          // Convert response to text
+          existingContent = await existingContent.text();
+
+          // Ensure the title is at the top
+          if (!existingContent.startsWith(initialTitle)) {
+            existingContent = `${initialTitle}\n${existingContent.trim()}`;
+          }
+
+          // Check if the URL already exists in the content
+          if (existingContent.includes(url)) {
+            return new Response(JSON.stringify({ success: false, message: 'URL already exists', bounce: true }), {
+              headers: { 
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': 'https://www.youtube.com',
+                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+              },
+            });
+          }
         }
 
-        // Read the file content
-        const text = await object.text();
-        
-        // Return the file content as plain text
-        return new Response(text, {
+        // Append the new URL directly to the existing content
+        const objectContent = `${existingContent}\n${url}`;
+
+        // Save the updated content back to R2 bucket
+        await env.R2_BUCKET.put(objectKey, objectContent);
+        // Return success of URL being added to url.txt
+        return new Response(JSON.stringify({ success: true, message: 'URL appended' }), {
           headers: { 
-            'Content-Type': 'text/plain',
-            'Access-Control-Allow-Origin': '*', // Allow all origins, I'm not sure it matters but I will change this if I am made aware it's insecure.
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': 'https://www.youtube.com',
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type'
           },
         });
       } catch (err) {
-        console.error(`Error fetching file: ${err.message}`);
-        return new Response(`Error fetching file: ${err.message}`, { status: 500 });
+        console.error(`Error saving URL: ${err.message}`);
+        return new Response(`Error saving URL: ${err.message}`, { status: 500 });
       }
     }
 
