@@ -10,6 +10,10 @@ export default {
         return new Response('No URL provided', { status: 400 });
       }
 
+      if (!url.includes('/watch')) {
+        return new Response('URL is not a video', { status: 400});
+      }
+
       try {
         // Remove the "&t=*" parameter if it exists
         url = url.replace(/&t=\d+s?/, '');
@@ -46,7 +50,7 @@ export default {
 
         // Save the updated content back to R2 bucket
         await env.R2_BUCKET.put(objectKey, objectContent);
-        // Return success of URL being added to url.txt
+
         return new Response(JSON.stringify({ success: true, message: 'URL appended' }), {
           headers: { 
             'Content-Type': 'application/json',
