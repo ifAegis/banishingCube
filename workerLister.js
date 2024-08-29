@@ -15,9 +15,6 @@ export default {
       }
 
       try {
-        // Remove the "&t=*" parameter if it exists
-        url = url.replace(/&t=\d+s?/, '');
-
         // Fetch existing content from R2 bucket
         let existingContent = await env.R2_BUCKET.get(objectKey);
         if (existingContent === null) {
@@ -62,6 +59,44 @@ export default {
       } catch (err) {
         console.error(`Error saving URL: ${err.message}`);
         return new Response(`Error saving URL: ${err.message}`, { status: 500 });
+      }
+    }
+
+    if (request.method === 'GET') {
+      try {
+        // Fetch existing content from R2 bucket
+        let existingContent = await env.R2_BUCKET.get(objectKey);
+        if (existingContent === null) {
+          return new Response('No URLs found', { status: 404 });
+        }
+
+        // Convert response to text
+        let content = await existingContent.text();
+
+        // Process each line to the desired format
+        const formattedContent = content.split('\n').map(line => {
+          // Ensure line is treated as a string and trimmed
+          line = line.trim(); 
+          
+          // Format each line as needed, except for title lines
+          if (line && !line.startsWith('! Title')) {
+            return `www.youtube.com##ytd-rich-item-renderer:has(a[href*="${line}"])`;
+          }
+          // Return lines that do not need formatting (e.g., title lines)
+          return line;
+        }).join('\n');
+
+        return new Response(formattedContent, {
+          headers: { 
+            'Content-Type': 'text/plain',
+            'Access-Control-Allow-Origin': 'https://www.youtube.com',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+          },
+        });
+      } catch (err) {
+        console.error(`Error retrieving URLs: ${err.message}`);
+        return new Response(`Error retrieving URLs: ${err.message}`, { status: 500 });
       }
     }
 

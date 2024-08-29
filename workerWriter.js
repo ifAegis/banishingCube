@@ -3,8 +3,8 @@ export default {
     if (request.method === 'POST') {
       const { url } = await request.json();
 
-      if (!url) {
-        return new Response('No URL provided', { status: 400 }); // Ideally, don't trigger this.
+      if (!url || url.length !== 11) {
+        return new Response('Invalid or missing URL', { status: 400 }); // Ensure URL is an 11-character string
       }
 
       const objectKey = 'urls.txt'; // Use a single file, with appended URLs
