@@ -1,5 +1,6 @@
 export default {
   async fetch(request, env) {
+    const initialTitle = '! Title: Banishing Cube';
     if (request.method === 'POST') {
       const { url } = await request.json();
 
@@ -13,12 +14,30 @@ export default {
         // Fetch existing content from R2 bucket
         let existingContent = await env.R2_BUCKET.get(objectKey);
         if (existingContent === null) {
-          existingContent = ''; // Initialize if file does not exist
+          // Initialize if file does not exist
+          existingContent = initialTitle;
         } else {
           // Convert response to text
           existingContent = await existingContent.text();
-        }
 
+          // Ensure the title is at the top
+          if (!existingContent.startsWith(initialTitle)) {
+            existingContent = `${initialTitle}\n${existingContent.trim()}`;
+          }
+
+          // Check if the URL already exists in the content
+          if (existingContent.includes(url)) {
+            return new Response(JSON.stringify({ success: false, message: 'URL already exists', bounce: true }), {
+              headers: { 
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': 'https://www.youtube.com',
+                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+              },
+            });
+          }
+        }
+        
         // Append the new URL directly to the existing content
         const objectContent = existingContent.trim() ? `${existingContent}\n${url}` : url;
 
