@@ -24,11 +24,11 @@ Clear any existing lines from the file, and copy and paste the contents of main.
 
 Save under File, or with Ctrl+S
 
-### You will need to come back to this later after setting up Workers, do not close the dashboard
+### You will need to come back to this later after setting up the Worker, do not close the dashboard
 
 Skip to the Cloudflare section for now
 
-After setting up your Cloudflare workers, add your workerWriter's url to the variable "workerURL"
+After setting up your Cloudflare worker, add your worker's url to the variable "workerURL"
 
 Save under File, or with Ctrl + S
 
@@ -65,7 +65,7 @@ Be sure to save!
 
 With your bucket now created, go to the left side and click on "Workers & Pages"
 
-Create your first worker, workerWriter. 
+Create your first worker, under whatever name pleases you
 
 Go to Settings, then Variables, and scroll down to add an R2 Bucket binding
 
@@ -73,19 +73,9 @@ Use the variable name R2_BUCKET, and bind the bucket you just created
 
 Edit the code of your worker.
 
-Copy and Paste the code from workerWriter.js into your worker, and click "Deploy" on the right side
+Copy and Paste the code from worker.js into your worker, and click "Deploy" on the right side
 
-Copy the url to workerWriter (nearby the Deploy button), go back and finish the Tampermonkey section from earlier, then return here to continue
-
-Create your second worker, workerLister
-
-Add an R2 Bucket binding
-
-Again use the variable name R2_BUCKET, and bind the same bucket as you used for workerWriter
-
-Copy and Paste the code from workerLister.js into your worker, and click "Deploy" on the right side
-
-Copy the url to workerLister, and continue to the Ublock Origin section 
+Copy the url to the worker (nearby the Deploy button), go back and finish the Tampermonkey section from earlier, then return here to continue
 
 ## Ublock Origin
 
@@ -93,12 +83,8 @@ Open the dashboard for Ublock Origin
 
 Scroll to the bottom of the "Filter Lists" page
 
-Click on "Import", and enter the URL of your workerLister Worker
+Click on "Import", and enter the URL of your worker
 
-I also personally recommend adding the following to "My filters" as this will remove any gaps left in the grid, but this is not at all required:
-
-`www.youtube.com##ytd-rich-grid-row,#contents.ytd-rich-grid-row:style(display: contents !important)`
-
-Ublock Origin will automatically update your list every 6 hours
+Ublock Origin will automatically update your list every hour
 
 ### Thank you for using my code and I hope it serves you well
