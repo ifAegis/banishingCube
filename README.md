@@ -85,6 +85,10 @@ Scroll to the bottom of the "Filter Lists" page
 
 Click on "Import", and enter the URL of your worker
 
-Ublock Origin will automatically update your list every hour
+Click "Apply changes" at the top of the page
+
+Ublock Origin will now automatically update your list every hour
 
 ### Thank you for using my code and I hope it serves you well
+
+### If you discover any problems with the scripts, please open an [issue](https://github.com/ifAegis/banishingCube/issues/new) so that I am made aware.
