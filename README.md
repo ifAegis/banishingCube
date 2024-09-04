@@ -87,7 +87,7 @@ Click on "Import", and enter the URL of your worker
 
 Click "Apply changes" at the top of the page
 
-Ublock Origin will now automatically update your list every hour
+Ublock Origin will now automatically update your list every 6 hours
 
 ### Thank you for using my code and I hope it serves you well
 

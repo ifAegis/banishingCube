@@ -1,6 +1,6 @@
 export default {
     async fetch(request, env) {
-        const initialTitle = `! Title: Banishing Cube\n! Expires: 1 hour\nwww.youtube.com##ytd-rich-grid-row,#contents.ytd-rich-grid-row:style(display: contents !important)`;
+        const initialTitle = `! Title: Banishing Cube\n! Expires: 317 minutes\nwww.youtube.com##ytd-rich-grid-row,#contents.ytd-rich-grid-row:style(display: contents !important)`;
         const objectKey = 'urls.txt'; // Use a single file to append URLs
 
         if (request.method === 'POST') {
