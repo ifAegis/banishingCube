@@ -65,13 +65,13 @@ Be sure to save!
 
 With your bucket now created, go to the left side and click on "Workers & Pages"
 
-Create your first worker, under whatever name pleases you
+Create your worker, under whatever name pleases you
 
 Go to Settings, then Variables, and scroll down to add an R2 Bucket binding
 
 Use the variable name R2_BUCKET, and bind the bucket you just created
 
-Edit the code of your worker.
+Edit the code of your worker
 
 Copy and Paste the code from worker.js into your worker, and click "Deploy" on the right side
 
